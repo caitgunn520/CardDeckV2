@@ -15,6 +15,9 @@ namespace CardDeck
         //standard deck of cards
         List<string> deck = new List<string>();
 
+        List<string> playerCards = new List<string>();
+        List<string> dealerCards = new List<string>();
+
         public Form1()
         {
             InitializeComponent();
@@ -32,8 +35,11 @@ namespace CardDeck
 
         public void ShowDeck()
         {
-            ///Clear the showLabel and then use a loop to display all
-            ///the cards that are currently in the main deck
+            showLabel.Text = "";
+            for (int i = 0; i < deck.Count; i++)
+            {
+                showLabel.Text += $"{deck[i]} ";
+            }
         }
 
         private void shuffleButton_Click(object sender, EventArgs e)
@@ -63,6 +69,26 @@ namespace CardDeck
             ///deck list, and then removes that card from the deck list.
             ///
             ///Run the ShowDeck() method
+
+            for (int i = 0; i < 5; i++)
+            {
+                playerCards.Add(deck[0]);
+                deck.RemoveAt(0);
+
+                dealerCards.Add(deck[0]);
+                deck.RemoveAt(0);
+            }
+
+            dealerCardsLabel.Text = "";
+            playerCardsLabel.Text = "";
+
+            for (int i = 0; i < playerCards.Count; i++)
+            {
+                dealerCardsLabel.Text += $"{dealerCards[i]} ";
+                playerCardsLabel.Text += $"{playerCards[i]} ";
+            }
+
+            ShowDeck();
         }
 
         private void collectButton_Click(object sender, EventArgs e)
