@@ -31,6 +31,11 @@ namespace CardDeck
             deck.AddRange(new string[] { "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "JS", "QS", "KS", "AS" });
 
             ShowDeck();
+
+            //disable all buttons except for Shuffle button
+            EnableButton(shuffleButton);
+            DisableButton(dealButton);
+            DisableButton(collectButton);
         }
 
         public void ShowDeck()
@@ -40,6 +45,34 @@ namespace CardDeck
             {
                 showLabel.Text += $"{deck[i]} ";
             }
+        }
+
+        public void DealCards(List<string> hand, Label handLabel)
+        {
+            for (int i = 0; i < 5;  i++)
+            {
+                hand.Add(deck[0]);
+                deck.RemoveAt(0);
+            }
+
+            handLabel.Text = "";
+            
+            for (int i = 0; i < hand.Count; i++)
+            {
+                handLabel.Text += $"{hand[i]} ";
+            }
+        }
+
+        public void EnableButton (Button button)
+        {
+            button.Enabled = true;
+            button.BackColor = Color.GreenYellow;
+        }
+
+        public void DisableButton (Button button)
+        {
+            button.Enabled = false;
+            button.BackColor = Color.LightGray;
         }
 
         private void shuffleButton_Click(object sender, EventArgs e)
@@ -57,38 +90,22 @@ namespace CardDeck
             deck = deckTemp;
 
             ShowDeck();
+
+            //enable deal button and disable shuffle button
+            EnableButton(dealButton);
+            DisableButton(shuffleButton);
         }
 
         private void dealButton_Click(object sender, EventArgs e)
         {
-            ///Deal 5 cards each to dealer and player and display them.
-            ///This can be done by using a for loop that runs 5 times,
-            ///and each time it adds to the playerCards list a card from 
-            ///the deck list, and then removes that card from the deck
-            ///list. It then adds to the dealerCards list a card from the
-            ///deck list, and then removes that card from the deck list.
-            ///
-            ///Run the ShowDeck() method
-
-            for (int i = 0; i < 5; i++)
-            {
-                playerCards.Add(deck[0]);
-                deck.RemoveAt(0);
-
-                dealerCards.Add(deck[0]);
-                deck.RemoveAt(0);
-            }
-
-            dealerCardsLabel.Text = "";
-            playerCardsLabel.Text = "";
-
-            for (int i = 0; i < playerCards.Count; i++)
-            {
-                dealerCardsLabel.Text += $"{dealerCards[i]} ";
-                playerCardsLabel.Text += $"{playerCards[i]} ";
-            }
-
+            DealCards(dealerCards, dealerCardsLabel);
+            DealCards(playerCards, playerCardsLabel);
+            
             ShowDeck();
+
+            //enable collect button and disable deal button
+            EnableButton(collectButton);
+            DisableButton(dealButton);
         }
 
         private void collectButton_Click(object sender, EventArgs e)
@@ -99,6 +116,20 @@ namespace CardDeck
             ///those cards back to the deck list. 
             ///            
             ///Run the ShowDeck() method
+
+            deck.AddRange(dealerCards);
+            deck.AddRange(playerCards);
+
+            dealerCards.Clear();
+            playerCards.Clear();
+
+            ShowDeck();
+            dealerCardsLabel.Text = "";
+            playerCardsLabel.Text = "";
+
+            //enable shuffle button and disable collect button
+            EnableButton(shuffleButton);
+            DisableButton(collectButton);
         }
     }
 }
